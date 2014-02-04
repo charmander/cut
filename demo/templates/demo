@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="initial-scale=1">
+
+		<title>Cut demo</title>
+
+		<link rel="stylesheet" type="text/css" href="cut.css">
+		<link rel="stylesheet" type="text/css" href="demo.css">
+	</head>
+	<body>
+		<!-- TODO: Persist zoom level and offset across navigation? -->
+
+		<form id="cut">
+			<input id="cut-image" type="image" src="example.jpg" width="1537" height="1024">
+
+			{% if start %}
+				{% if end %}
+					<div id="crop-coordinates" class="ended" style="left: {{ start[0] }}px; top: {{ start[1] }}px; width: {{ end[0] - start[0] }}px; height: {{ end[1] - start[1] }}px;"></div>
+				{% else %}
+					<input type="hidden" name="start-x" value="{{ start[0] }}">
+					<input type="hidden" name="start-y" value="{{ start[1] }}">
+					<div id="crop-coordinates" class="started" style="left: {{ start[0] }}px; top: {{ start[1] }}px;"></div>
+				{% endif %}
+			{% endif %}
+		</form>
+
+		<script type="application/javascript" src="cut.js"></script>
+		<script type="application/javascript" src="demo.js"></script>
+
+		<footer id="footer">
+			<p><a href="https://commons.wikimedia.org/wiki/File:Pair_of_Merops_apiaster_feeding.jpg">Image</a> by Pierre Dalous.</p>
+		</footer>
+	</body>
+</html>

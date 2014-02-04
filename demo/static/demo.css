@@ -1,0 +1,96 @@
+html {
+	box-sizing: border-box;
+	min-height: 100%;
+	padding-bottom: 2em;
+	position: relative;
+}
+
+body {
+	background-color: #444;
+	margin: 0;
+}
+
+.cut-container {
+	bottom: 2em;
+	left: 0;
+	padding: 1em;
+	position: absolute;
+	right: 0;
+	top: 0;
+	z-index: 2;
+}
+
+.cut-crop-box {
+	outline: 0.1em solid silver;
+}
+
+#controls {
+	position: absolute;
+	z-index: 3;
+}
+
+#crop-coordinates {
+	position: absolute;
+}
+
+#crop-coordinates.started {
+	background-image: radial-gradient(silver, silver 0.1em, transparent 0.1em);
+	border: 0.1em solid red;
+	border-radius: 0.6em;
+	height: 1em;
+	margin-left: -0.5em;
+	margin-top: -0.5em;
+	width: 1em;
+}
+
+#crop-coordinates.ended {
+	border: 0.1em dashed silver;
+}
+
+.button {
+	background-color: rgba(0, 0, 0, 0.5);
+	border: none;
+	border-radius: 1em;
+	color: silver;
+	cursor: pointer;
+	font-size: 1em;
+	height: 2em;
+	margin-left: 0.4em;
+	outline: none;
+	width: 2em;
+}
+
+.button:hover, .button:focus, .button:active {
+	background-color: silver;
+	color: #444;
+}
+
+.button::-moz-focus-inner {
+	border: none;
+	padding: 0;
+}
+
+#footer {
+	bottom: 0;
+	color: #ddd;
+	font-family: PT Sans, sans-serif;
+	left: 0;
+	line-height: 2;
+	position: absolute;
+	right: 0;
+	text-align: center;
+}
+
+#footer p {
+	margin: 0;
+}
+
+#footer a {
+	color: #fa3;
+	text-decoration: none;
+}
+
+#footer a:focus {
+	color: #fc6;
+	outline: none;
+}
