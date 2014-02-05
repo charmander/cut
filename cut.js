@@ -264,6 +264,8 @@ var Cut = (function() {
 			zoom = this.scaleMaximum;
 		}
 
+		this.offsetX *= zoom / this.zoom;
+		this.offsetY *= zoom / this.zoom;
 		this.zoom = zoom;
 		this.cropBox.style.backgroundSize = (this.imageWidth * zoom).toFixed(1) + "px auto";
 		this.positionImage();
