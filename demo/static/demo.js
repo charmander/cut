@@ -12,6 +12,7 @@ var controls = document.createElement("div");
 controls.id = "controls";
 
 var slider = document.createElement("input");
+slider.id = "zoom-slider";
 slider.type = "range";
 slider.min = cut.scaleMinimum.toFixed(2);
 slider.max = 1;
