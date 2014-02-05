@@ -41,8 +41,8 @@ var Cut = (function() {
 
 		var cut = this;
 
-		this.imageWidth = imageInput.width;
-		this.imageHeight = imageInput.height;
+		this.imageWidth = +imageInput.getAttribute("width");
+		this.imageHeight = +imageInput.getAttribute("height");
 		this.cropWidth = options.cropWidth;
 		this.cropHeight = options.cropHeight;
 
