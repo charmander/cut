@@ -68,6 +68,7 @@ body {
 }
 
 #crop-coordinates {
+	pointer-events: none;
 	position: absolute;
 }
 
