@@ -220,9 +220,9 @@ var Cut = (function () {
 		}, false);
 
 		container.addEventListener('keypress', function (e) {
-			if (e.key === '-') {
+			if (e.key === '-' || e.charCode === 45) {
 				cut.zoomTo(cut.zoom - 0.05);
-			} else if (e.key === '+') {
+			} else if (e.key === '+' || e.charCode === 43) {
 				cut.zoomTo(cut.zoom + 0.05);
 			} else {
 				return;
