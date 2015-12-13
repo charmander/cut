@@ -1,8 +1,8 @@
-'use strict';
-
 /* exported Cut */
 
 var Cut = (function () {
+	'use strict';
+
 	function EventEmitter() {
 		this.events = {};
 	}
@@ -91,13 +91,6 @@ var Cut = (function () {
 			var originalOffsetX = cut.offsetX;
 			var originalOffsetY = cut.offsetY;
 
-			function stopDrag(e) {
-				window.removeEventListener('mousemove', drag, false);
-				window.removeEventListener('mouseup', stopDrag, false);
-
-				drag(e);
-			}
-
 			function drag(e) {
 				var deltaX = e.pageX - startX;
 				var deltaY = e.pageY - startY;
@@ -108,6 +101,13 @@ var Cut = (function () {
 				cut.emit('move', { x: cut.offsetX, y: cut.offsetY });
 
 				e.preventDefault();
+			}
+
+			function stopDrag(e) {
+				window.removeEventListener('mousemove', drag, false);
+				window.removeEventListener('mouseup', stopDrag, false);
+
+				drag(e);
 			}
 
 			window.addEventListener('mousemove', drag, false);
@@ -140,11 +140,6 @@ var Cut = (function () {
 				startDistance = Math.sqrt(touchDeltaX * touchDeltaX + touchDeltaY * touchDeltaY);
 			}
 
-			function stopDrag() {
-				window.removeEventListener('touchmove', drag, false);
-				window.removeEventListener('touchend', stopDrag, false);
-			}
-
 			function drag(e) {
 				var pageX = e.touches[0].pageX;
 				var pageY = e.touches[0].pageY;
@@ -174,6 +169,11 @@ var Cut = (function () {
 				cut.emit('move', { x: cut.offsetX, y: cut.offsetY });
 
 				e.preventDefault();
+			}
+
+			function stopDrag() {
+				window.removeEventListener('touchmove', drag, false);
+				window.removeEventListener('touchend', stopDrag, false);
 			}
 
 			window.addEventListener('touchmove', drag, false);
