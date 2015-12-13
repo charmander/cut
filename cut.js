@@ -48,9 +48,10 @@ var Cut = (function () {
 		this.cropWidth = options.cropWidth;
 		this.cropHeight = options.cropHeight;
 
-		var isImageThin = this.imageWidth / this.imageHeight < options.cropWidth / options.cropHeight;
-		this.scaleContain = Math.min(1, isImageThin ? options.cropHeight / this.imageHeight : options.cropWidth / this.imageWidth);
-		this.scaleCover = Math.min(1, !isImageThin ? options.cropHeight / this.imageHeight : options.cropWidth / this.imageWidth);
+		var scaleMatchWidth = options.cropWidth / this.imageWidth;
+		var scaleMatchHeight = options.cropHeight / this.imageHeight;
+		this.scaleContain = Math.min(1, Math.min(scaleMatchWidth, scaleMatchHeight));
+		this.scaleCover = Math.min(1, Math.max(scaleMatchWidth, scaleMatchHeight));
 
 		var imageElement = document.createElement('img');
 		imageElement.className = 'cut-image';
