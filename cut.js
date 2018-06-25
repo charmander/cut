@@ -86,6 +86,8 @@ var Cut = (function () {
 				return;
 			}
 
+			cut.constrainPosition();
+
 			var startX = e.pageX;
 			var startY = e.pageY;
 			var originalOffsetX = cut.offsetX;
@@ -130,6 +132,8 @@ var Cut = (function () {
 			if (e.touches.length > 2) {
 				return;
 			}
+
+			cut.constrainPosition();
 
 			var originalOffsetX = cut.offsetX;
 			var originalOffsetY = cut.offsetY;
@@ -197,6 +201,8 @@ var Cut = (function () {
 				return;
 			}
 
+			cut.constrainPosition();
+
 			switch (e.keyCode) {
 				case 37: // Left
 					cut.offsetX -= 5;
@@ -252,11 +258,46 @@ var Cut = (function () {
 	Cut.prototype = Object.create(EventEmitter.prototype);
 	Cut.prototype.constructor = Cut;
 
+	Cut.prototype.constrainedPosition = function () {
+		var displayWidth = this.imageWidth * this.zoom;
+		var maxX = this.cropWidth / 2 + displayWidth / 2;
+		var offsetX = this.offsetX;
+
+		if (offsetX > maxX) {
+			offsetX = maxX;
+		} else if (offsetX < -maxX) {
+			offsetX = -maxX;
+		}
+
+		var displayHeight = this.imageHeight * this.zoom;
+		var maxY = this.cropHeight / 2 + displayHeight / 2;
+		var offsetY = this.offsetY;
+
+		if (offsetY > maxY) {
+			offsetY = maxY;
+		} else if (offsetY < -maxY) {
+			offsetY = -maxY;
+		}
+
+		return {
+			offsetX: offsetX,
+			offsetY: offsetY,
+		};
+	};
+
+	Cut.prototype.constrainPosition = function () {
+		var con = this.constrainedPosition();
+		this.offsetX = con.offsetX;
+		this.offsetY = con.offsetY;
+	};
+
 	Cut.prototype.positionImage = function () {
+		var con = this.constrainedPosition();
+
 		var imageTransform =
 			'translate(' +
-				(-this.imageWidth / 2 + this.offsetX).toFixed(1) + 'px, ' +
-				(-this.imageHeight / 2 + this.offsetY).toFixed(1) + 'px) ' +
+				(-this.imageWidth / 2 + con.offsetX).toFixed(1) + 'px, ' +
+				(-this.imageHeight / 2 + con.offsetY).toFixed(1) + 'px) ' +
 			'scale(' + this.zoom + ')';
 
 		this.imageElement.style.webkitTransform = imageTransform;
@@ -265,8 +306,8 @@ var Cut = (function () {
 		this.imageElement.style.transform = imageTransform;
 
 		this.cropBox.style.backgroundPosition =
-			(-this.imageWidth / 2 * this.zoom + this.cropWidth / 2 + this.offsetX).toFixed(1) + 'px ' +
-			(-this.imageHeight / 2 * this.zoom + this.cropHeight / 2 + this.offsetY).toFixed(1) + 'px';
+			(-this.imageWidth / 2 * this.zoom + this.cropWidth / 2 + con.offsetX).toFixed(1) + 'px ' +
+			(-this.imageHeight / 2 * this.zoom + this.cropHeight / 2 + con.offsetY).toFixed(1) + 'px';
 	};
 
 	Cut.prototype.zoomTo = function (zoom) {
