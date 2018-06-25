@@ -91,7 +91,7 @@ var Cut = (function () {
 			var originalOffsetX = cut.offsetX;
 			var originalOffsetY = cut.offsetY;
 
-			function drag(e) {
+			function drag_(e) {
 				var deltaX = e.pageX - startX;
 				var deltaY = e.pageY - startY;
 
@@ -103,11 +103,20 @@ var Cut = (function () {
 				e.preventDefault();
 			}
 
+			function drag(e) {
+				if (e.buttons !== 0) {
+					drag_(e);
+				} else {
+					window.removeEventListener('mousemove', drag, false);
+					window.removeEventListener('mouseup', stopDrag, false);
+				}
+			}
+
 			function stopDrag(e) {
 				window.removeEventListener('mousemove', drag, false);
 				window.removeEventListener('mouseup', stopDrag, false);
 
-				drag(e);
+				drag_(e);
 			}
 
 			window.addEventListener('mousemove', drag, false);
