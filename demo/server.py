@@ -22,7 +22,7 @@ def home():
         else:
             start = int(x), int(y)
 
-    return render_template("demo", start=start, end=end)
+    return render_template("demo.j2", start=start, end=end)
 
 
 if __name__ == "__main__":
