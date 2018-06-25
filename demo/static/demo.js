@@ -17,7 +17,7 @@
 	var slider = document.createElement('input');
 	slider.id = 'zoom-slider';
 	slider.type = 'range';
-	slider.min = cut.scaleMinimum.toFixed(2);
+	slider.min = cut.scaleMinimum;
 	slider.max = 1;
 	slider.step = 0.01;
 	slider.value = 1;

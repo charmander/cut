@@ -53,6 +53,11 @@ var Cut = (function () {
 		this.scaleContain = Math.min(1, Math.min(scaleMatchWidth, scaleMatchHeight));
 		this.scaleCover = Math.min(1, Math.max(scaleMatchWidth, scaleMatchHeight));
 
+		this.requireCover =
+			options.requireCover == null ?
+				true :
+				options.requireCover;
+
 		var imageElement = document.createElement('img');
 		imageElement.className = 'cut-image';
 		imageElement.src = imageInput.src;
@@ -69,7 +74,12 @@ var Cut = (function () {
 
 		this.imageElement = imageElement;
 		this.cropBox = cropBox;
-		this.scaleMinimum = options.scaleMinimum == null ? this.scaleContain : +options.scaleMinimum;
+		this.scaleMinimum =
+			options.scaleMinimum == null ?
+				this.requireCover ?
+					this.scaleCover :
+					this.scaleContain :
+				+options.scaleMinimum;
 		this.scaleMaximum = +options.scaleMaximum || 1;
 
 		var container = document.createElement('div');
@@ -99,6 +109,7 @@ var Cut = (function () {
 
 				cut.offsetX = originalOffsetX + deltaX;
 				cut.offsetY = originalOffsetY + deltaY;
+				cut.constrainPosition();
 				cut.positionImage();
 				cut.emit('move', { x: cut.offsetX, y: cut.offsetY });
 
@@ -175,7 +186,9 @@ var Cut = (function () {
 					currentDistance = Math.sqrt(touchDeltaX * touchDeltaX + touchDeltaY * touchDeltaY);
 
 					cut.zoomTo(originalZoom * currentDistance / startDistance);
+					cut.constrainPosition();
 				} else {
+					cut.constrainPosition();
 					cut.positionImage();
 				}
 
@@ -206,32 +219,27 @@ var Cut = (function () {
 			switch (e.keyCode) {
 				case 37: // Left
 					cut.offsetX -= 5;
-					cut.positionImage();
-					cut.emit('move', { x: cut.offsetX, y: cut.offsetY });
 					break;
 
 				case 38: // Up
 					cut.offsetY -= 5;
-					cut.positionImage();
-					cut.emit('move', { x: cut.offsetX, y: cut.offsetY });
 					break;
 
 				case 39: // Right
 					cut.offsetX += 5;
-					cut.positionImage();
-					cut.emit('move', { x: cut.offsetX, y: cut.offsetY });
 					break;
 
 				case 40: // Down
 					cut.offsetY += 5;
-					cut.positionImage();
-					cut.emit('move', { x: cut.offsetX, y: cut.offsetY });
 					break;
 
 				default:
 					return;
 			}
 
+			cut.constrainPosition();
+			cut.positionImage();
+			cut.emit('move', { x: cut.offsetX, y: cut.offsetY });
 			e.preventDefault();
 		}, false);
 
@@ -260,7 +268,18 @@ var Cut = (function () {
 
 	Cut.prototype.constrainedPosition = function () {
 		var displayWidth = this.imageWidth * this.zoom;
-		var maxX = this.cropWidth / 2 + displayWidth / 2;
+		var displayHeight = this.imageHeight * this.zoom;
+		var maxX;
+		var maxY;
+
+		if (this.requireCover) {
+			maxX = Math.abs(displayWidth / 2 - this.cropWidth / 2);
+			maxY = Math.abs(displayHeight / 2 - this.cropHeight / 2);
+		} else {
+			maxX = displayWidth / 2 + this.cropWidth / 2;
+			maxY = displayHeight / 2 + this.cropHeight / 2;
+		}
+
 		var offsetX = this.offsetX;
 
 		if (offsetX > maxX) {
@@ -269,8 +288,6 @@ var Cut = (function () {
 			offsetX = -maxX;
 		}
 
-		var displayHeight = this.imageHeight * this.zoom;
-		var maxY = this.cropHeight / 2 + displayHeight / 2;
 		var offsetY = this.offsetY;
 
 		if (offsetY > maxY) {
