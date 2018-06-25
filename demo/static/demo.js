@@ -11,6 +11,8 @@
 		cropHeight: 120
 	});
 
+	document.documentElement.className += ' cut';
+
 	var controls = document.createElement('div');
 	controls.id = 'controls';
 
@@ -57,9 +59,11 @@
 			var width = parseInt(cropCoordinates.style.width, 10);
 			var zoom = 120 / width;
 
+			cut.zoomTo(zoom);
 			cut.offsetX = (cutImage.width / 2 - startX) * zoom - 60;
 			cut.offsetY = (cutImage.height / 2 - startY) * zoom - 60;
-			cut.zoomTo(zoom);
+			cut.constrainPosition();
+			cut.positionImage();
 		}
 	}
 })();

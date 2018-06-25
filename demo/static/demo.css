@@ -9,6 +9,10 @@ body {
 }
 
 #cut {
+	position: relative;
+}
+
+html.cut #cut {
 	bottom: 2em;
 	left: 0;
 	position: absolute;
@@ -106,14 +110,17 @@ body {
 }
 
 #footer {
-	bottom: 0;
 	color: #ddd;
 	font-family: PT Sans, sans-serif;
-	left: 0;
 	line-height: 2;
+	text-align: center;
+}
+
+html.cut #footer {
+	bottom: 0;
+	left: 0;
 	position: absolute;
 	right: 0;
-	text-align: center;
 }
 
 #footer p {
